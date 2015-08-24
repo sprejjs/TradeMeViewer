@@ -15,7 +15,7 @@ import java.util.List;
 public class TradeMeApiWrapper {
 
     /**
-     * Return categoris in the from the root level.
+     * Return categories in the from the root level.
      */
     public List<Category> getCategories() {
         return null;

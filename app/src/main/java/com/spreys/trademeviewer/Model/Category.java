@@ -97,4 +97,12 @@ public class Category {
     public boolean hasClassifields() {
         return false;
     }
+
+    /**
+     * Returns the list of subcategories.
+     * @return null if there are no subcategories and a List otherwise.
+     */
+    public List<Category> getSubcategories() {
+        return null;
+    }
 }
