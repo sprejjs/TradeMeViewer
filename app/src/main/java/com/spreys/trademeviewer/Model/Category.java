@@ -1,6 +1,11 @@
 package com.spreys.trademeviewer.Model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +23,7 @@ public class Category {
     private int сount;
     private boolean isRestrictead;
     private boolean hasLegalNotice;
-    private boolean hasClassfields;
+    private boolean hasClassfieds;
     private List<Category> subcategories;
 
     /**
@@ -28,7 +33,34 @@ public class Category {
      * @throws InvalidParameterException if json parameter is not in a valid format
      */
     public Category(String json) {
-        throw new InvalidParameterException();
+        //Convert String to JSONObject
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+
+            this.name = jsonObject.getString("Name");
+            this.number = jsonObject.getString("Number");
+            this.path = jsonObject.getString("Path");
+            if(jsonObject.has("HasClassifieds")) {
+                this.hasClassfieds = jsonObject.getBoolean("HasClassifieds");
+            }
+
+            if(jsonObject.has("Subcategories")) {
+                JSONArray json_subcategories = jsonObject.getJSONArray("Subcategories");
+
+                ArrayList<Category> subcategories = new ArrayList<>();
+
+                for (int i = 0; i<json_subcategories.length(); i++) {
+                    //Recursively create subcategories
+                    subcategories.add(new Category(json_subcategories.getJSONObject(i).toString()));
+                }
+
+                this.subcategories = subcategories;
+            }
+
+
+        } catch (JSONException | NullPointerException exception) {
+            throw new IllegalArgumentException("Unable to parse JSON");
+        }
     }
 
     /**
@@ -94,8 +126,8 @@ public class Category {
      * @return Returns false if classifields are not allowed and true in any other
      * case (i.e. if category is restricted or the object hasn't been initialised).
      */
-    public boolean hasClassifields() {
-        return false;
+    public boolean hasClassfieds() {
+        return this.hasClassfieds;
     }
 
     /**
@@ -103,6 +135,6 @@ public class Category {
      * @return null if there are no subcategories and a List otherwise.
      */
     public List<Category> getSubcategories() {
-        return null;
+        return this.subcategories;
     }
 }
