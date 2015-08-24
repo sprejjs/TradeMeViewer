@@ -1,13 +1,18 @@
 package com.spreys.trademeviewer;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.spreys.trademeviewer.Model.Category;
+import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
 import com.spreys.trademeviewer.dummy.DummyContent;
+
+import java.util.List;
 
 /**
  * A list fragment representing a list of Categories. This fragment
@@ -19,6 +24,8 @@ import com.spreys.trademeviewer.dummy.DummyContent;
  * interface.
  */
 public class CategoryListFragment extends ListFragment {
+    private TradeMeApiWrapper mApiWrapper = new TradeMeApiWrapper();
+    private List<Category> mCategories;
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -76,6 +83,12 @@ public class CategoryListFragment extends ListFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 DummyContent.ITEMS));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        new GetAllCategories().execute();
     }
 
     @Override
@@ -147,5 +160,25 @@ public class CategoryListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    class GetAllCategories extends AsyncTask<String, Void, List<Category>> {
+
+        @Override
+        protected List<Category> doInBackground(String... params) {
+            return mApiWrapper.getCategories();
+        }
+
+        @Override
+        protected void onPostExecute(final List<Category> categories) {
+            super.onPostExecute(categories);
+            mCategories = categories;
+
+            setListAdapter(new ArrayAdapter<Category>(
+                    getActivity(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    mCategories));
+        }
     }
 }

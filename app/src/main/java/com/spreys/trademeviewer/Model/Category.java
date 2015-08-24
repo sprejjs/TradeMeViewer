@@ -137,4 +137,12 @@ public class Category {
     public List<Category> getSubcategories() {
         return this.subcategories;
     }
+
+    /**
+     * Method ret
+     * @return
+     */
+    public String toString() {
+        return name;
+    }
 }
