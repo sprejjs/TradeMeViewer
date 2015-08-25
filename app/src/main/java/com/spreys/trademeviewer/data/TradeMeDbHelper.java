@@ -28,15 +28,17 @@ public class TradeMeDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CategoryEntry.TABLE_NAME + " (" +
-                CategoryEntry._ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                CategoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
-                CategoryEntry.COLUMN_LOC_NAME + "TEXT NOT NULL, " +
-                CategoryEntry.COLUMN_LOC_KEY + "TEXT NOT NULL, " +
-                CategoryEntry.COLUMN_LOC_PATH + "TEXT NOT NULL, " +
-                CategoryEntry.COLUMN_LOC_COUNT + "INTEGER NOT NULL, " +
-                CategoryEntry.COLUMN_LOC_IS_RESTRICTED + "INTEGER NOT NULL, " +
-                CategoryEntry.COLUMN_LOC_HAS_LEGAL_NOTICE + "INTEGER NOT NULL, " +
+                CategoryEntry.COLUMN_LOC_NAME + " TEXT NOT NULL, " +
+                CategoryEntry.COLUMN_LOC_NUMBER + " TEXT NOT NULL, " +
+                CategoryEntry.COLUMN_LOC_PATH + " TEXT NOT NULL, " +
+                CategoryEntry.COLUMN_LOC_COUNT + " INTEGER, " +
+                CategoryEntry.COLUMN_LOC_IS_RESTRICTED + " INTEGER, " +
+                CategoryEntry.COLUMN_LOC_HAS_LEGAL_NOTICE + " INTEGER, " +
                 CategoryEntry.COLUMN_LOC_HAS_CLASSFIELD + ");";
+
+        db.execSQL(SQL_CREATE_CATEGORY_TABLE);
     }
 
     @Override

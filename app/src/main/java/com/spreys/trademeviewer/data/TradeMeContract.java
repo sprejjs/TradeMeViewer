@@ -32,7 +32,7 @@ public class TradeMeContract {
         public static final String TABLE_NAME = "category";
 
         public static final String COLUMN_LOC_NAME = "name";
-        public static final String COLUMN_LOC_KEY = "number";
+        public static final String COLUMN_LOC_NUMBER = "number";
         public static final String COLUMN_LOC_PATH = "path";
         public static final String COLUMN_LOC_COUNT = "сount";
         public static final String COLUMN_LOC_IS_RESTRICTED = "isRestrictead";

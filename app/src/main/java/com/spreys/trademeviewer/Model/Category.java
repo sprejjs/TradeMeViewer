@@ -139,8 +139,8 @@ public class Category {
     }
 
     /**
-     * Method ret
-     * @return
+     * Method returns the name of the category
+     * @return name of the category
      */
     public String toString() {
         return name;
