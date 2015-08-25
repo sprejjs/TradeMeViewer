@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.spreys.trademeviewer.sync.TradeMeSyncAdapter;
+
 
 /**
  * An activity representing a list of Categories. This activity
@@ -49,7 +51,7 @@ public class CategoryListActivity extends FragmentActivity
                     .setActivateOnItemClick(true);
         }
 
-        // TODO: If exposing deep links into your app, handle intents here.
+        TradeMeSyncAdapter.initializeSyncAdapter(this);
     }
 
     /**

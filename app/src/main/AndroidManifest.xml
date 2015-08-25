@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spreys.trademeviewer" >
 
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -26,6 +30,38 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CategoryListActivity" />
         </activity>
+
+        <!-- Content provider -->
+        <provider
+            android:authorities="trademe.spreys.com"
+            android:name=".data.TradeMeContentProvider"
+            android:syncable="true"
+            android:exported="false"/>
+
+        <!-- services -->
+        <service android:name=".sync.CategoriesService" />
+
+        <!-- sync adapter -->
+        <service android:name=".sync.TradeMeAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- The SyncAdapter service -->
+        <service android:name=".sync.TradeMeSyncService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
     </application>
 
 </manifest>
