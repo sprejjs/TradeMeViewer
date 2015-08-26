@@ -33,7 +33,7 @@
 
         <!-- Content provider -->
         <provider
-            android:authorities="trademe.spreys.com"
+            android:authorities="com.spreys.trademeviewer"
             android:name=".data.TradeMeContentProvider"
             android:syncable="true"
             android:exported="false"/>
