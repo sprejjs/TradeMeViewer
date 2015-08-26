@@ -37,6 +37,22 @@ public class CategoryListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
+        //Initialise fragment
+        CategoryListFragment fragment = new CategoryListFragment();
+
+        //Add category id if exists
+        if(getIntent().hasExtra(CategoryListFragment.PARAM_CATEGORY_ID)) {
+            Bundle arguments = new Bundle();
+            arguments.putString(CategoryListFragment.PARAM_CATEGORY_ID,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+            fragment.setArguments(arguments);
+        }
+
+        //Initiate transition
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.categories_list_container, fragment)
+                .commit();
+
         if (findViewById(R.id.category_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -75,9 +91,9 @@ public class CategoryListActivity extends FragmentActivity
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, CategoryDetailActivity.class);
-            detailIntent.putExtra(CategoryDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
+            Intent intent = new Intent(this, CategoryListActivity.class);
+            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, id);
+            startActivity(intent);
         }
     }
 }

@@ -1,11 +1,11 @@
 package com.spreys.trademeviewer.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.spreys.trademeviewer.Model.Category;
@@ -21,6 +21,7 @@ import com.spreys.trademeviewer.Model.Category;
 public class TradeMeContentProvider extends ContentProvider {
 
     private static final int CATEGORY = 100;
+    private static final int CATEGORY_ID = 101;
 
     private static final UriMatcher sUriMather = buildUriMather();
     private TradeMeDbHelper mTradeMeHelper;
@@ -30,6 +31,7 @@ public class TradeMeContentProvider extends ContentProvider {
         final String authority = TradeMeContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, TradeMeContract.PATH_CATEGORY, CATEGORY);
+        matcher.addURI(authority, TradeMeContract.PATH_CATEGORY + "/*", CATEGORY_ID);
 
         return matcher;
     }
@@ -49,14 +51,24 @@ public class TradeMeContentProvider extends ContentProvider {
                 retCursor = mTradeMeHelper.getReadableDatabase().query(
                     TradeMeContract.CategoryEntry.TABLE_NAME,
                         projection,
-                        selection,
+                        TradeMeContract.CategoryEntry.COLUMN_PARENT_ID + " = ''",
                         selectionArgs,
                         null,
                         null,
                         sortOrder
                 );
                 break;
-
+            case CATEGORY_ID:
+                retCursor = mTradeMeHelper.getReadableDatabase().query(
+                    TradeMeContract.CategoryEntry.TABLE_NAME,
+                        projection,
+                        TradeMeContract.CategoryEntry.COLUMN_PARENT_ID + " = '" + uri.getLastPathSegment() + "'",
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

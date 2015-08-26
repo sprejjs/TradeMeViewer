@@ -24,6 +24,7 @@ public class Category {
     private boolean isRestrictead;
     private boolean hasLegalNotice;
     private boolean hasClassfieds;
+    private String parentCategory;
     private List<Category> subcategories;
 
     /**
@@ -33,6 +34,16 @@ public class Category {
      * @throws InvalidParameterException if json parameter is not in a valid format
      */
     public Category(String json) {
+        initialiseCategoryFromJson(json);
+    }
+
+    public Category(String json, String parentCategory) {
+        this.parentCategory = parentCategory;
+
+        initialiseCategoryFromJson(json);
+    }
+
+    private void initialiseCategoryFromJson(String json) {
         //Convert String to JSONObject
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -51,7 +62,7 @@ public class Category {
 
                 for (int i = 0; i<json_subcategories.length(); i++) {
                     //Recursively create subcategories
-                    subcategories.add(new Category(json_subcategories.getJSONObject(i).toString()));
+                    subcategories.add(new Category(json_subcategories.getJSONObject(i).toString(), number));
                 }
 
                 this.subcategories = subcategories;
@@ -144,5 +155,9 @@ public class Category {
      */
     public String toString() {
         return name;
+    }
+
+    public String getParentId() {
+        return parentCategory;
     }
 }

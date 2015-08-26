@@ -60,9 +60,9 @@ public class TestDb extends AndroidTestCase{
     static ContentValues createTestCategory() {
         // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
-        testValues.put(CategoryEntry.COLUMN_LOC_NAME, "Caravans & motorhomes");
-        testValues.put(CategoryEntry.COLUMN_LOC_NUMBER, "0001-0028-");
-        testValues.put(CategoryEntry.COLUMN_LOC_PATH, "/Trade-Me-Motors/Caravans-motorhomes");
+        testValues.put(CategoryEntry.COLUMN_NAME, "Caravans & motorhomes");
+        testValues.put(CategoryEntry.COLUMN_NUMBER, "0001-0028-");
+        testValues.put(CategoryEntry.COLUMN_PATH, "/Trade-Me-Motors/Caravans-motorhomes");
 
         return testValues;
     }
@@ -79,6 +79,5 @@ public class TestDb extends AndroidTestCase{
             String expectedValue = entry.getValue().toString();
             assertEquals(expectedValue, valueCursor.getString(idx));
         }
-        //valueCursor.close();
     }
 }

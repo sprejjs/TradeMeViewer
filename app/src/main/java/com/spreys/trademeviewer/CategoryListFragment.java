@@ -2,6 +2,7 @@ package com.spreys.trademeviewer;
 
 import android.app.Activity;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -27,18 +28,21 @@ import java.util.List;
  * interface.
  */
 public class CategoryListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private TradeMeApiWrapper mApiWrapper = new TradeMeApiWrapper();
-    private List<Category> mCategories;
+    public static final String PARAM_CATEGORY_ID = "category_id";
     private CategoryAdapter adapter;
     private static final int CATEGORY_LOADER = 0;
 
     public static final String[] CATEGORY_COLUMNS = {
             TradeMeContract.CategoryEntry.TABLE_NAME + "." + TradeMeContract.CategoryEntry._ID,
-            TradeMeContract.CategoryEntry.COLUMN_LOC_NAME
+            TradeMeContract.CategoryEntry.COLUMN_NAME,
+            TradeMeContract.CategoryEntry.COLUMN_NUMBER,
+            TradeMeContract.CategoryEntry.COLUMN_PARENT_ID
     };
 
     public static final int COL_ID = 0;
     public static final int COL_NAME = 1;
+    public static final int COL_NUMBER = 2;
+    public static final int COL_PARENT_ID = 3;
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -59,14 +63,27 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri contentUri;
+        if(getCategoryId() != null) {
+            contentUri = TradeMeContract.CategoryEntry.buildCategoryUri(getCategoryId());
+        } else {
+            contentUri = TradeMeContract.CategoryEntry.CONTENT_URI;
+        }
         return new CursorLoader(
                 getContext(),
-                TradeMeContract.CategoryEntry.CONTENT_URI,
+                contentUri,
                 CATEGORY_COLUMNS,
                 null,
                 null,
                 null
         );
+    }
+
+    public String getCategoryId(){
+        if(null != getArguments()){
+            return getArguments().getString(PARAM_CATEGORY_ID);
+        }
+        return null;
     }
 
     @Override
@@ -161,9 +178,12 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
+        Cursor cursor = adapter.getCursor();
+        String categoryId = cursor.getString(COL_NUMBER);
+
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-//        mCallbacks.onItemSelected(mCategories.get(position));
+        mCallbacks.onItemSelected(categoryId);
     }
 
     @Override

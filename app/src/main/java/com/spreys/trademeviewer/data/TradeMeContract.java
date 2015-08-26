@@ -31,13 +31,18 @@ public class TradeMeContract {
 
         public static final String TABLE_NAME = "category";
 
-        public static final String COLUMN_LOC_NAME = "name";
-        public static final String COLUMN_LOC_NUMBER = "number";
-        public static final String COLUMN_LOC_PATH = "path";
-        public static final String COLUMN_LOC_COUNT = "сount";
-        public static final String COLUMN_LOC_IS_RESTRICTED = "isRestrictead";
-        public static final String COLUMN_LOC_HAS_LEGAL_NOTICE = "hasLegalNotice";
-        public static final String COLUMN_LOC_HAS_CLASSFIELD = "hasClassfieds";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_PARENT_ID = "parent_number";
+        public static final String COLUMN_NUMBER = "number";
+        public static final String COLUMN_PATH = "path";
+        public static final String COLUMN_COUNT = "сount";
+        public static final String COLUMN_IS_RESTRICTED = "isRestrictead";
+        public static final String COLUMN_HAS_LEGAL_NOTICE = "hasLegalNotice";
+        public static final String COLUMN_HAS_CLASSFIELD = "hasClassfieds";
+
+        public static Uri buildCategoryUri(String id) {
+            return Uri.withAppendedPath(CONTENT_URI, id);
+        }
 
         public static Uri buildCategoryUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

@@ -8,6 +8,7 @@ import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
 import com.spreys.trademeviewer.data.TradeMeContract;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,19 +42,30 @@ public class CategoriesService extends IntentService {
 
         Vector<ContentValues> cVVector = new Vector<ContentValues>(categories.size());
 
-        for(Category category : categories){
-            ContentValues values = new ContentValues();
+        cVVector = extractSubcategories(cVVector, categories);
 
-            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_NAME, category.getName());
-            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_NUMBER, category.getNumber());
-            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_PATH, category.getPath());
-
-            cVVector.add(values);
-        }
-
-        int amountOfAffectedRows = this.getContentResolver().bulkInsert(
+        this.getContentResolver().bulkInsert(
                 TradeMeContract.CategoryEntry.CONTENT_URI,
                 cVVector.toArray(new ContentValues[cVVector.size()])
         );
+    }
+
+    private Vector<ContentValues> extractSubcategories(Vector<ContentValues> cVVector, List<Category> categories) {
+        for(Category category : categories){
+            ContentValues values = new ContentValues();
+
+            values.put(TradeMeContract.CategoryEntry.COLUMN_PARENT_ID, category.getParentId());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_NAME, category.getName());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_NUMBER, category.getNumber());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_PATH, category.getPath());
+
+            cVVector.add(values);
+
+            if(category.getSubcategories() != null && category.getSubcategories().size() > 0) {
+                cVVector = extractSubcategories(cVVector, category.getSubcategories());
+            }
+        }
+
+        return cVVector;
     }
 }
