@@ -8,7 +8,10 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.spreys.trademeviewer.Model.Category;
@@ -31,6 +34,19 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     public static final String PARAM_CATEGORY_ID = "category_id";
     private CategoryAdapter adapter;
     private static final int CATEGORY_LOADER = 0;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View listContent = super.onCreateView(inflater, container, savedInstanceState);
+
+        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+
+        assert listContent != null;
+        ((FrameLayout)view.findViewById(R.id.fragment_categories_list_container)).addView(listContent);
+
+        return view;
+    }
 
     public static final String[] CATEGORY_COLUMNS = {
             TradeMeContract.CategoryEntry.TABLE_NAME + "." + TradeMeContract.CategoryEntry._ID,
