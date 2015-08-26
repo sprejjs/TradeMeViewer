@@ -1,16 +1,19 @@
 package com.spreys.trademeviewer;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
-import com.spreys.trademeviewer.dummy.DummyContent;
+import com.spreys.trademeviewer.adapters.CategoryAdapter;
+import com.spreys.trademeviewer.data.TradeMeContract;
 
 import java.util.List;
 
@@ -23,9 +26,19 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class CategoryListFragment extends ListFragment {
+public class CategoryListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private TradeMeApiWrapper mApiWrapper = new TradeMeApiWrapper();
     private List<Category> mCategories;
+    private CategoryAdapter adapter;
+    private static final int CATEGORY_LOADER = 0;
+
+    public static final String[] CATEGORY_COLUMNS = {
+            TradeMeContract.CategoryEntry.TABLE_NAME + "." + TradeMeContract.CategoryEntry._ID,
+            TradeMeContract.CategoryEntry.COLUMN_LOC_NAME
+    };
+
+    public static final int COL_ID = 0;
+    public static final int COL_NAME = 1;
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -43,6 +56,40 @@ public class CategoryListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                getContext(),
+                TradeMeContract.CategoryEntry.CONTENT_URI,
+                CATEGORY_COLUMNS,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+        attachListViewAdapter();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
+    }
+
+    public void attachListViewAdapter(){
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getLoaderManager().restartLoader(CATEGORY_LOADER, null, this);
+    }
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -76,19 +123,7 @@ public class CategoryListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        new GetAllCategories().execute();
+        adapter = new CategoryAdapter(getContext(), null, 0);
     }
 
     @Override
@@ -160,25 +195,5 @@ public class CategoryListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
-    }
-
-    class GetAllCategories extends AsyncTask<String, Void, List<Category>> {
-
-        @Override
-        protected List<Category> doInBackground(String... params) {
-            return mApiWrapper.getCategories();
-        }
-
-        @Override
-        protected void onPostExecute(final List<Category> categories) {
-            super.onPostExecute(categories);
-            mCategories = categories;
-
-            setListAdapter(new ArrayAdapter<Category>(
-                    getActivity(),
-                    android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    mCategories));
-        }
     }
 }

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.spreys.trademeviewer.Model.Category;
+
 /**
  * Created with Android Studio
  *
@@ -135,5 +137,42 @@ public class TradeMeContentProvider extends ContentProvider {
         }
 
         return numberOfAffectedRows;
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase db = mTradeMeHelper.getWritableDatabase();
+        final int match = sUriMather.match(uri);
+
+        clearCategoryTable();
+
+        switch (match) {
+            case CATEGORY:
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value: values) {
+                        long _id = db.insert(TradeMeContract.CategoryEntry.TABLE_NAME, null, value);
+                        if(_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
+    /**
+     * Clears the database.
+     */
+    private void clearCategoryTable() {
+        final SQLiteDatabase db = mTradeMeHelper.getWritableDatabase();
+        db.delete(TradeMeContract.CategoryEntry.TABLE_NAME, null, null);
     }
 }

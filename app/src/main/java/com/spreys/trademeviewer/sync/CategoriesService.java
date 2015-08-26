@@ -1,12 +1,15 @@
 package com.spreys.trademeviewer.sync;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Intent;
 
 import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
+import com.spreys.trademeviewer.data.TradeMeContract;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created with Android Studio
@@ -35,5 +38,22 @@ public class CategoriesService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         TradeMeApiWrapper mApiWrapper = new TradeMeApiWrapper();
         List<Category> categories = mApiWrapper.getCategories();
+
+        Vector<ContentValues> cVVector = new Vector<ContentValues>(categories.size());
+
+        for(Category category : categories){
+            ContentValues values = new ContentValues();
+
+            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_NAME, category.getName());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_NUMBER, category.getNumber());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_LOC_PATH, category.getPath());
+
+            cVVector.add(values);
+        }
+
+        int amountOfAffectedRows = this.getContentResolver().bulkInsert(
+                TradeMeContract.CategoryEntry.CONTENT_URI,
+                cVVector.toArray(new ContentValues[cVVector.size()])
+        );
     }
 }
