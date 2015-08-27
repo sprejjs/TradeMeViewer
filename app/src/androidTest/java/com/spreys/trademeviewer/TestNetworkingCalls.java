@@ -3,6 +3,7 @@ package com.spreys.trademeviewer;
 import android.test.AndroidTestCase;
 
 import com.spreys.trademeviewer.Model.Category;
+import com.spreys.trademeviewer.Model.Listing;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
 
 import java.util.List;
@@ -28,5 +29,13 @@ public class TestNetworkingCalls extends AndroidTestCase {
 
         assertEquals(13, categories.size());
         assertEquals("Aircraft", categories.get(0).getName());
+    }
+
+    public void testSearchAllMotors() {
+        TradeMeApiWrapper apiWrapper = new TradeMeApiWrapper();
+
+        List<Listing> listings = apiWrapper.searchListings("0001-");
+
+        assertTrue(listings.size() > 20);
     }
 }
