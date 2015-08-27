@@ -1,7 +1,8 @@
 package com.spreys.trademeviewer;
 
-import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -13,13 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.spreys.trademeviewer.Model.Category;
-import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
 import com.spreys.trademeviewer.adapters.CategoryAdapter;
 import com.spreys.trademeviewer.data.TradeMeContract;
-
-import java.util.List;
 
 /**
  * A list fragment representing a list of Categories. This fragment
@@ -32,8 +31,10 @@ import java.util.List;
  */
 public class CategoryListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String PARAM_CATEGORY_ID = "category_id";
+    public static final String PARAM_PARENT_CATEGORY_NAME = "parent-category_name";
     private CategoryAdapter adapter;
     private static final int CATEGORY_LOADER = 0;
+    private Callbacks mCallbacks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,35 +43,30 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
 
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
+        String parentCategoryName = getParentCategoryName();
+
+        TextView textView = (TextView)view.findViewById(R.id.fragment_categories_parent_category_name);
+        textView.setPaintFlags(textView.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        textView.setText(parentCategoryName);
+        textView.setVisibility(parentCategoryName == null ? View.GONE : View.VISIBLE);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+
         assert listContent != null;
         ((FrameLayout)view.findViewById(R.id.fragment_categories_list_container)).addView(listContent);
 
         return view;
     }
 
-    public static final String[] CATEGORY_COLUMNS = {
-            TradeMeContract.CategoryEntry.TABLE_NAME + "." + TradeMeContract.CategoryEntry._ID,
-            TradeMeContract.CategoryEntry.COLUMN_NAME,
-            TradeMeContract.CategoryEntry.COLUMN_NUMBER,
-            TradeMeContract.CategoryEntry.COLUMN_PARENT_ID
-    };
-
-    public static final int COL_ID = 0;
-    public static final int COL_NAME = 1;
-    public static final int COL_NUMBER = 2;
-    public static final int COL_PARENT_ID = 3;
-
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
-    private Callbacks mCallbacks = sDummyCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
@@ -88,17 +84,25 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
         return new CursorLoader(
                 getContext(),
                 contentUri,
-                CATEGORY_COLUMNS,
+                Category.CATEGORY_COLUMNS,
                 null,
                 null,
                 null
         );
     }
 
-    public String getCategoryId(){
+    private String getCategoryId(){
         if(null != getArguments()){
             return getArguments().getString(PARAM_CATEGORY_ID);
         }
+        return null;
+    }
+
+    private String getParentCategoryName() {
+        if(null != getArguments()) {
+            return getArguments().getString(PARAM_PARENT_CATEGORY_NAME);
+        }
+
         return null;
     }
 
@@ -133,18 +137,9 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(Category selectedCategory);
     }
 
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id) {
-        }
-    };
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -171,35 +166,19 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        // Activities containing this fragment must implement its callbacks.
-        if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+        mCallbacks = (Callbacks)context;
     }
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = adapter.getCursor();
-        String categoryId = cursor.getString(COL_NUMBER);
-
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(categoryId);
+        mCallbacks.onItemSelected(new Category(adapter.getCursor()));
     }
 
     @Override

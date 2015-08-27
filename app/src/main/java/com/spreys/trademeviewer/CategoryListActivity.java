@@ -3,7 +3,9 @@ package com.spreys.trademeviewer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
+import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.sync.TradeMeSyncAdapter;
 
 
@@ -23,7 +25,7 @@ import com.spreys.trademeviewer.sync.TradeMeSyncAdapter;
  * {@link CategoryListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class CategoryListActivity extends FragmentActivity
+public class CategoryListActivity extends AppCompatActivity
         implements CategoryListFragment.Callbacks {
 
     /**
@@ -45,6 +47,12 @@ public class CategoryListActivity extends FragmentActivity
             Bundle arguments = new Bundle();
             arguments.putString(CategoryListFragment.PARAM_CATEGORY_ID,
                     getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+
+            if (getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
+                arguments.putString(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME,
+                        getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
+            }
+
             fragment.setArguments(arguments);
         }
 
@@ -75,13 +83,14 @@ public class CategoryListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Category selectedCategory) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(CategoryDetailFragment.ARG_ITEM_ID, id);
+//            arguments.putString(CategoryDetailFragment.PARA, selectedCategory.getNumber());
+//            arguments.putString(CategoryDetailFragment.ARG_PARENT_CATEGO);
             CategoryDetailFragment fragment = new CategoryDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -92,7 +101,8 @@ public class CategoryListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent intent = new Intent(this, CategoryListActivity.class);
-            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, id);
+            intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
+            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
             startActivity(intent);
         }
     }

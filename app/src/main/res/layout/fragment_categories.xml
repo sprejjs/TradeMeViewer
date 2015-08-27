@@ -4,8 +4,9 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="Test"
+        android:id="@+id/fragment_categories_parent_category_name"
         android:textAppearance="?android:textAppearanceLarge"
+        android:drawableLeft="@drawable/ic_arrow_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

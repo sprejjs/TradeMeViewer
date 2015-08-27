@@ -1,5 +1,9 @@
 package com.spreys.trademeviewer.Model;
 
+import android.database.Cursor;
+
+import com.spreys.trademeviewer.data.TradeMeContract;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +31,21 @@ public class Category {
     private String parentCategory;
     private List<Category> subcategories;
 
+
+    public static final String[] CATEGORY_COLUMNS = {
+            TradeMeContract.CategoryEntry.TABLE_NAME + "." + TradeMeContract.CategoryEntry._ID,
+            TradeMeContract.CategoryEntry.COLUMN_NAME,
+            TradeMeContract.CategoryEntry.COLUMN_NUMBER,
+            TradeMeContract.CategoryEntry.COLUMN_PARENT_ID,
+            TradeMeContract.CategoryEntry.COLUMN_PATH
+    };
+
+    public static final int COL_ID = 0;
+    public static final int COL_NAME = 1;
+    public static final int COL_NUMBER = 2;
+    public static final int COL_PARENT_ID = 3;
+    public static final int COL_PATH = 4;
+
     /**
      * Default constructor for the method.
      * @param json the JSON string returned from the TradeMe API. String can contain the
@@ -41,6 +60,13 @@ public class Category {
         this.parentCategory = parentCategory;
 
         initialiseCategoryFromJson(json);
+    }
+
+    public Category(Cursor cursor) {
+        this.name = cursor.getString(COL_NAME);
+        this.number = cursor.getString(COL_NUMBER);
+        this.parentCategory = cursor.getString(COL_PARENT_ID);
+        this.path = cursor.getString(COL_PATH);
     }
 
     private void initialiseCategoryFromJson(String json) {
