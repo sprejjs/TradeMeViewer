@@ -1,12 +1,13 @@
-package com.spreys.trademeviewer;
+package com.spreys.trademeviewer.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.spreys.trademeviewer.Fragments.CategoryDetailFragment;
+import com.spreys.trademeviewer.Fragments.SearchResultsFragment;
 import com.spreys.trademeviewer.Fragments.CategoryListFragment;
 import com.spreys.trademeviewer.Model.Category;
+import com.spreys.trademeviewer.R;
 import com.spreys.trademeviewer.Sync.TradeMeSyncAdapter;
 
 
@@ -14,13 +15,13 @@ import com.spreys.trademeviewer.Sync.TradeMeSyncAdapter;
  * An activity representing a list of Categories. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link CategoryDetailActivity} representing
+ * lead to a {@link SearchResultsActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  * <p/>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link CategoryListFragment} and the item details
- * (if present) is a {@link CategoryDetailFragment}.
+ * (if present) is a {@link SearchResultsFragment}.
  * <p/>
  * This activity also implements the required
  * {@link CategoryListFragment.Callbacks} interface
@@ -47,6 +48,24 @@ public class CategoryListActivity extends AppCompatActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+
+            SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
+            Bundle arguments = new Bundle();
+
+            if(getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
+                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME,
+                        getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
+            }
+
+            if(getIntent().hasExtra(CategoryListFragment.PARAM_SEARCH_QUERY)) {
+                arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY,
+                        getIntent().getStringExtra(CategoryListFragment.PARAM_SEARCH_QUERY));
+            }
+
+            searchResultsFragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.category_detail_container, searchResultsFragment)
+                    .commit();
         }
 
         //Initialise fragment
@@ -86,9 +105,5 @@ public class CategoryListActivity extends AppCompatActivity
         intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
         intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
         startActivity(intent);
-
-        if (mTwoPane) {
-            //TODO place logic to display search results here
-        }
     }
 }

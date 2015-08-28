@@ -25,7 +25,7 @@ import com.spreys.trademeviewer.DateStorage.TradeMeContract;
  * A list fragment representing a list of Categories. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link CategoryDetailFragment}.
+ * currently being viewed in a {@link SearchResultsFragment}.
  * <p/>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
@@ -34,6 +34,7 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     public static final String PARAM_CATEGORY_ID = "category_id";
     public static final String PARAM_PARENT_CATEGORY_NAME = "parent-category_name";
     public static final String PARAM_TWO_PANE = "two_pane";
+    public static final String PARAM_SEARCH_QUERY = "search_query";
     private CategoryAdapter adapter;
     private static final int CATEGORY_LOADER = 0;
     private Callbacks mCallbacks;

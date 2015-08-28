@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer;
+package com.spreys.trademeviewer.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-import com.spreys.trademeviewer.Fragments.CategoryDetailFragment;
+import com.spreys.trademeviewer.Fragments.SearchResultsFragment;
+import com.spreys.trademeviewer.R;
 
 /**
  * An activity representing a single Category detail screen. This
@@ -15,9 +16,9 @@ import com.spreys.trademeviewer.Fragments.CategoryDetailFragment;
  * in a {@link CategoryListActivity}.
  * <p/>
  * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link CategoryDetailFragment}.
+ * more than a {@link SearchResultsFragment}.
  */
-public class CategoryDetailActivity extends AppCompatActivity {
+public class SearchResultsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,14 @@ public class CategoryDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(CategoryDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(CategoryDetailFragment.ARG_ITEM_ID));
-            CategoryDetailFragment fragment = new CategoryDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.category_detail_container, fragment)
-                    .commit();
+//            Bundle arguments = new Bundle();
+//            arguments.putString(SearchResultsFragment.ARG_ITEM_ID,
+//                    getIntent().getStringExtra(SearchResultsFragment.ARG_ITEM_ID));
+//            SearchResultsFragment fragment = new SearchResultsFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.category_detail_container, fragment)
+//                    .commit();
         }
     }
 
