@@ -57,6 +57,7 @@ public class CategoriesService extends IntentService {
             values.put(TradeMeContract.CategoryEntry.COLUMN_NAME, category.getName());
             values.put(TradeMeContract.CategoryEntry.COLUMN_NUMBER, category.getNumber());
             values.put(TradeMeContract.CategoryEntry.COLUMN_PATH, category.getPath());
+            values.put(TradeMeContract.CategoryEntry.COLUMN_SUBCATEGORIES_COUNT, category.getSubcategoriesCount());
 
             cVVector.add(values);
 

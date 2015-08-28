@@ -128,7 +128,17 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
         attachListViewAdapter();
-        setListShown(data.getCount() > 0);
+        boolean emptyCursor = data.getCount() == 0;
+
+        setListShown(!emptyCursor);
+
+        if(!emptyCursor) {
+            data.moveToFirst();
+            Category category = new Category(data);
+            setActivateOnItemClick(category.getSubcategoriesCount() == 0);
+        } else {
+            setActivateOnItemClick(false);
+        }
     }
 
     @Override
@@ -183,8 +193,6 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
-
-        setActivateOnItemClick(getArguments().getBoolean(PARAM_TWO_PANE));
     }
 
     @Override

@@ -29,6 +29,7 @@ public class Category {
     private boolean hasLegalNotice;
     private boolean hasClassfieds;
     private String parentCategory;
+    private int subcategoriesCount;
     private List<Category> subcategories;
 
 
@@ -37,7 +38,8 @@ public class Category {
             TradeMeContract.CategoryEntry.COLUMN_NAME,
             TradeMeContract.CategoryEntry.COLUMN_NUMBER,
             TradeMeContract.CategoryEntry.COLUMN_PARENT_ID,
-            TradeMeContract.CategoryEntry.COLUMN_PATH
+            TradeMeContract.CategoryEntry.COLUMN_PATH,
+            TradeMeContract.CategoryEntry.COLUMN_SUBCATEGORIES_COUNT,
     };
 
     public static final int COL_ID = 0;
@@ -45,6 +47,7 @@ public class Category {
     public static final int COL_NUMBER = 2;
     public static final int COL_PARENT_ID = 3;
     public static final int COL_PATH = 4;
+    public static final int COL_SUBCATEGORIES_COUNT = 5;
 
     /**
      * Default constructor for the method.
@@ -67,6 +70,7 @@ public class Category {
         this.number = cursor.getString(COL_NUMBER);
         this.parentCategory = cursor.getString(COL_PARENT_ID);
         this.path = cursor.getString(COL_PATH);
+        this.subcategoriesCount = cursor.getInt(COL_SUBCATEGORIES_COUNT);
     }
 
     private void initialiseCategoryFromJson(String json) {
@@ -92,6 +96,7 @@ public class Category {
                 }
 
                 this.subcategories = subcategories;
+                this.subcategoriesCount = subcategories.size();
             }
 
 
@@ -185,5 +190,9 @@ public class Category {
 
     public String getParentId() {
         return parentCategory;
+    }
+
+    public int getSubcategoriesCount() {
+        return subcategoriesCount;
     }
 }

@@ -39,6 +39,7 @@ public class TradeMeContract {
         public static final String COLUMN_IS_RESTRICTED = "isRestrictead";
         public static final String COLUMN_HAS_LEGAL_NOTICE = "hasLegalNotice";
         public static final String COLUMN_HAS_CLASSFIELD = "hasClassfieds";
+        public static final String COLUMN_SUBCATEGORIES_COUNT = "subcategoriesCount";
 
         public static Uri buildCategoryUri(String id) {
             return Uri.withAppendedPath(CONTENT_URI, id);

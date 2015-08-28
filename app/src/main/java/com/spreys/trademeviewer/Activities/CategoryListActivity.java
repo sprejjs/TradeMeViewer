@@ -48,32 +48,7 @@ public class CategoryListActivity extends AppCompatActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-
-            SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
-            Bundle arguments = new Bundle();
-
-            boolean categorySet = false;
-            if(getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
-                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
-                        getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
-                categorySet = true;
-            }
-
-            if(getIntent().hasExtra(CategoryListFragment.PARAM_SEARCH_QUERY)) {
-                arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY,
-                        getIntent().getStringExtra(CategoryListFragment.PARAM_SEARCH_QUERY));
-            } else {
-                if (!categorySet) {
-                    //If we didn't set a category and there is no search query, then search for a
-                    //letter "a", otherwise api does not return any results.
-                    arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, "a");
-                }
-            }
-
-            searchResultsFragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.category_detail_container, searchResultsFragment)
-                    .commit();
+            openSearchInCategory(getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
         }
 
         //Initialise fragment
@@ -109,10 +84,43 @@ public class CategoryListActivity extends AppCompatActivity
      */
     @Override
     public void onItemSelected(Category selectedCategory) {
-        Intent intent = new Intent(this, CategoryListActivity.class);
-        intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
-        intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
-        startActivity(intent);
+        if(selectedCategory.getSubcategoriesCount() > 0) {
+            Intent intent = new Intent(this, CategoryListActivity.class);
+            intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
+            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
+            startActivity(intent);
+        } else {
+            if(mTwoPane) {
+                openSearchInCategory(selectedCategory.getNumber());
+            }
+        }
+    }
+
+    private void openSearchInCategory(String categoryName) {
+        SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
+        Bundle arguments = new Bundle();
+
+        boolean categorySet = false;
+        if(categoryName != null) {
+            arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID, categoryName);
+            categorySet = true;
+        }
+
+        if(getIntent().hasExtra(CategoryListFragment.PARAM_SEARCH_QUERY)) {
+            arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_SEARCH_QUERY));
+        } else {
+            if (!categorySet) {
+                //If we didn't set a category and there is no search query, then search for a
+                //letter "a", otherwise api does not return any results.
+                arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, "a");
+            }
+        }
+
+        searchResultsFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.category_detail_container, searchResultsFragment)
+                .commit();
     }
 
     @Override

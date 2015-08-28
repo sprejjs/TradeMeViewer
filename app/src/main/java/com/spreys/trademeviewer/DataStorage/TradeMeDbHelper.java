@@ -36,6 +36,7 @@ public class TradeMeDbHelper extends SQLiteOpenHelper {
                 CategoryEntry.COLUMN_COUNT + " INTEGER, " +
                 CategoryEntry.COLUMN_IS_RESTRICTED + " INTEGER, " +
                 CategoryEntry.COLUMN_HAS_LEGAL_NOTICE + " INTEGER, " +
+                CategoryEntry.COLUMN_SUBCATEGORIES_COUNT + " INTEGER, " +
                 CategoryEntry.COLUMN_HAS_CLASSFIELD + ");";
 
         db.execSQL(SQL_CREATE_CATEGORY_TABLE);
