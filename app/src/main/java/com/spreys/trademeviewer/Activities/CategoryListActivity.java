@@ -145,6 +145,14 @@ public class CategoryListActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.category_detail_container, searchResultsFragment)
                     .commit();
+        } else {
+            Intent intent = new Intent(this, SearchResultsActivity.class);
+            intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+            intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
+            intent.putExtra(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, searchQuery);
+            startActivity(intent);
         }
     }
 }
