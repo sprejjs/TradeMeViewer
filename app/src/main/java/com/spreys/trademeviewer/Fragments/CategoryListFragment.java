@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer;
+package com.spreys.trademeviewer.Fragments;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -17,8 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.spreys.trademeviewer.Model.Category;
-import com.spreys.trademeviewer.adapters.CategoryAdapter;
-import com.spreys.trademeviewer.data.TradeMeContract;
+import com.spreys.trademeviewer.R;
+import com.spreys.trademeviewer.Adapters.CategoryAdapter;
+import com.spreys.trademeviewer.DateStorage.TradeMeContract;
 
 /**
  * A list fragment representing a list of Categories. This fragment

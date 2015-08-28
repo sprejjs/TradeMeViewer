@@ -34,15 +34,15 @@
         <!-- Content provider -->
         <provider
             android:authorities="com.spreys.trademeviewer"
-            android:name=".data.TradeMeContentProvider"
+            android:name=".DateStorage.TradeMeContentProvider"
             android:syncable="true"
             android:exported="false"/>
 
         <!-- services -->
-        <service android:name=".sync.CategoriesService" />
+        <service android:name=".Sync.CategoriesService" />
 
         <!-- sync adapter -->
-        <service android:name=".sync.TradeMeAuthenticatorService">
+        <service android:name=".Sync.TradeMeAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -52,7 +52,7 @@
         </service>
 
         <!-- The SyncAdapter service -->
-        <service android:name=".sync.TradeMeSyncService"
+        <service android:name=".Sync.TradeMeSyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />

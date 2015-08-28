@@ -5,9 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
-import com.spreys.trademeviewer.Model.Category;
-import com.spreys.trademeviewer.data.TradeMeContract.*;
-import com.spreys.trademeviewer.data.TradeMeDbHelper;
+import com.spreys.trademeviewer.DateStorage.TradeMeContract.*;
+import com.spreys.trademeviewer.DateStorage.TradeMeDbHelper;
 
 import java.util.Map;
 import java.util.Set;

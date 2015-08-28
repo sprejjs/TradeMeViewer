@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.spreys.trademeviewer.Fragments.CategoryDetailFragment;
+
 /**
  * An activity representing a single Category detail screen. This
  * activity is only used on handset devices. On tablet-size devices,

@@ -2,7 +2,7 @@ package com.spreys.trademeviewer.Model;
 
 import android.database.Cursor;
 
-import com.spreys.trademeviewer.data.TradeMeContract;
+import com.spreys.trademeviewer.DateStorage.TradeMeContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
