@@ -1,5 +1,6 @@
 package com.spreys.trademeviewer.Fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,21 +49,13 @@ public class SearchResultsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
-
-        // Show the dummy content as text in a TextView.
-//        if (mItem != null) {
-////            ((TextView) rootView.findViewById(R.id.category_detail)).setText(mItem.content);
-//        }
-
-        return rootView;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search_results, container, false);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(Context context) {
+        super.onAttach(context);
         new SearchApiTask().execute();
     }
 
@@ -89,9 +82,11 @@ public class SearchResultsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final List<Listing> searchResults) {
-            SearchResultAdapter searchResultAdapter = new SearchResultAdapter(getActivity(), searchResults);
-            ((GridView)getActivity().findViewById(R.id.fragment_search_results_grid_view))
-                    .setAdapter(searchResultAdapter);
+            if(getActivity() != null) {
+                SearchResultAdapter searchResultAdapter = new SearchResultAdapter(getActivity(), searchResults);
+                ((GridView)getActivity().findViewById(R.id.fragment_search_results_grid_view))
+                        .setAdapter(searchResultAdapter);
+            }
         }
     }
 }

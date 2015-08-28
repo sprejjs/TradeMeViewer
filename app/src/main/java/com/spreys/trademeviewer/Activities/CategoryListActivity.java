@@ -114,4 +114,24 @@ public class CategoryListActivity extends AppCompatActivity
         intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
         startActivity(intent);
     }
+
+    @Override
+    public void onSearch(String searchQuery) {
+        if(mTwoPane) {
+            SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
+            Bundle arguments = new Bundle();
+
+            if(getIntent().hasExtra(CategoryListFragment.PARAM_CATEGORY_ID)) {
+                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
+                        getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+            }
+
+            arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, searchQuery);
+
+            searchResultsFragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.category_detail_container, searchResultsFragment)
+                    .commit();
+        }
+    }
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.spreys.trademeviewer.Model.Category;
@@ -61,6 +62,20 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
 
         assert listContent != null;
         ((FrameLayout)view.findViewById(R.id.fragment_categories_list_container)).addView(listContent);
+
+        ((SearchView)view.findViewById(R.id.fragment_categories_search_view))
+                .setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        mCallbacks.onSearch(query);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return true;
+                    }
+                });
 
         return view;
     }
@@ -142,6 +157,7 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
          * Callback for when an item has been selected.
          */
         public void onItemSelected(Category selectedCategory);
+        public void onSearch(String searchQuery);
     }
 
 
