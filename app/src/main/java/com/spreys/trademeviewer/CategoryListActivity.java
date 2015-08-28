@@ -2,6 +2,7 @@ package com.spreys.trademeviewer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
@@ -39,27 +40,6 @@ public class CategoryListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
-        //Initialise fragment
-        CategoryListFragment fragment = new CategoryListFragment();
-
-        //Add category id if exists
-        if(getIntent().hasExtra(CategoryListFragment.PARAM_CATEGORY_ID)) {
-            Bundle arguments = new Bundle();
-            arguments.putString(CategoryListFragment.PARAM_CATEGORY_ID,
-                    getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
-
-            if (getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
-                arguments.putString(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME,
-                        getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
-            }
-
-            fragment.setArguments(arguments);
-        }
-
-        //Initiate transition
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.categories_list_container, fragment)
-                .commit();
 
         if (findViewById(R.id.category_detail_container) != null) {
             // The detail container view will be present only in the
@@ -67,13 +47,31 @@ public class CategoryListActivity extends AppCompatActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((CategoryListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.category_list))
-                    .setActivateOnItemClick(true);
         }
+
+        //Initialise fragment
+        CategoryListFragment fragment = new CategoryListFragment();
+        Bundle arguments = new Bundle();
+
+        //Add category id if exists
+        if(getIntent().hasExtra(CategoryListFragment.PARAM_CATEGORY_ID)) {
+
+            arguments.putString(CategoryListFragment.PARAM_CATEGORY_ID,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+        }
+
+        if (getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
+            arguments.putString(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME,
+                    getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
+        }
+
+        arguments.putBoolean(CategoryListFragment.PARAM_TWO_PANE, mTwoPane);
+        fragment.setArguments(arguments);
+
+        //Initiate transition
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.categories_list_container, fragment)
+                .commit();
 
         TradeMeSyncAdapter.initializeSyncAdapter(this);
     }
@@ -84,26 +82,13 @@ public class CategoryListActivity extends AppCompatActivity
      */
     @Override
     public void onItemSelected(Category selectedCategory) {
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle arguments = new Bundle();
-//            arguments.putString(CategoryDetailFragment.PARA, selectedCategory.getNumber());
-//            arguments.putString(CategoryDetailFragment.ARG_PARENT_CATEGO);
-            CategoryDetailFragment fragment = new CategoryDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.category_detail_container, fragment)
-                    .commit();
+        Intent intent = new Intent(this, CategoryListActivity.class);
+        intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
+        intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
+        startActivity(intent);
 
-        } else {
-            // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
-            Intent intent = new Intent(this, CategoryListActivity.class);
-            intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
-            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
-            startActivity(intent);
+        if (mTwoPane) {
+            //TODO place logic to display search results here
         }
     }
 }

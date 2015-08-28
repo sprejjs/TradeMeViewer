@@ -32,6 +32,7 @@ import com.spreys.trademeviewer.data.TradeMeContract;
 public class CategoryListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String PARAM_CATEGORY_ID = "category_id";
     public static final String PARAM_PARENT_CATEGORY_NAME = "parent-category_name";
+    public static final String PARAM_TWO_PANE = "two_pane";
     private CategoryAdapter adapter;
     private static final int CATEGORY_LOADER = 0;
     private Callbacks mCallbacks;
@@ -163,6 +164,8 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
+
+        setActivateOnItemClick(getArguments().getBoolean(PARAM_TWO_PANE));
     }
 
     @Override
