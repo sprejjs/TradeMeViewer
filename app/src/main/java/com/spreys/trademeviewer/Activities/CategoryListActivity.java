@@ -52,14 +52,22 @@ public class CategoryListActivity extends AppCompatActivity
             SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
             Bundle arguments = new Bundle();
 
+            boolean categorySet = false;
             if(getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
                 arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
                         getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
+                categorySet = true;
             }
 
             if(getIntent().hasExtra(CategoryListFragment.PARAM_SEARCH_QUERY)) {
                 arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY,
                         getIntent().getStringExtra(CategoryListFragment.PARAM_SEARCH_QUERY));
+            } else {
+                if (!categorySet) {
+                    //If we didn't set a category and there is no search query, then search for a
+                    //letter "a", otherwise api does not return any results.
+                    arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, "a");
+                }
             }
 
             searchResultsFragment.setArguments(arguments);

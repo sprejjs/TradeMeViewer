@@ -106,7 +106,7 @@ public class TradeMeApiWrapper {
         }
 
         if(searchQuery != null && !searchQuery.equals("")) {
-            searchQueryParam = PARAM_KEY_SEARCH_STRING + "=" + "&";
+            searchQueryParam = PARAM_KEY_SEARCH_STRING + "=" + searchQuery + "&";
         }
 
         String url = getBaseUrl() + API_URL_SEARCH + apiFormat() + "?" + categoryParam + searchQueryParam + oauthParameters();
