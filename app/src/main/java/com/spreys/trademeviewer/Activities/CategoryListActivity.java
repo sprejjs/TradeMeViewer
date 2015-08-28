@@ -8,7 +8,7 @@ import com.spreys.trademeviewer.Fragments.SearchResultsFragment;
 import com.spreys.trademeviewer.Fragments.CategoryListFragment;
 import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.R;
-import com.spreys.trademeviewer.Sync.TradeMeSyncAdapter;
+import com.spreys.trademeviewer.Synchronization.TradeMeSyncAdapter;
 
 
 /**
@@ -53,8 +53,8 @@ public class CategoryListActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
 
             if(getIntent().hasExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME)) {
-                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME,
-                        getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
+                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
+                        getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
             }
 
             if(getIntent().hasExtra(CategoryListFragment.PARAM_SEARCH_QUERY)) {

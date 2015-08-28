@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer.sync;
+package com.spreys.trademeviewer.Synchronization;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

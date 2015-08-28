@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer.sync;
+package com.spreys.trademeviewer.Synchronization;
 
 import android.app.IntentService;
 import android.content.ContentValues;
@@ -6,9 +6,8 @@ import android.content.Intent;
 
 import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
-import com.spreys.trademeviewer.data.TradeMeContract;
+import com.spreys.trademeviewer.DataStorage.TradeMeContract;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 

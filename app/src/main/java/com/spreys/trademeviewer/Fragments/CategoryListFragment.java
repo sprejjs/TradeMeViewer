@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.spreys.trademeviewer.Model.Category;
 import com.spreys.trademeviewer.R;
-import com.spreys.trademeviewer.Adapters.CategoryAdapter;
-import com.spreys.trademeviewer.DateStorage.TradeMeContract;
+import com.spreys.trademeviewer.Adapt.CategoryAdapter;
+import com.spreys.trademeviewer.DataStorage.TradeMeContract;
 
 /**
  * A list fragment representing a list of Categories. This fragment
@@ -113,6 +113,7 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
         attachListViewAdapter();
+        setListShown(data.getCount() > 0);
     }
 
     @Override

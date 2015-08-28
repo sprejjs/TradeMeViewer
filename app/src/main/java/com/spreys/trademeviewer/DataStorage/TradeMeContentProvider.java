@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer.DateStorage;
+package com.spreys.trademeviewer.DataStorage;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

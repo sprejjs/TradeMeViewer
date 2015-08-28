@@ -10,7 +10,7 @@ import android.widget.GridView;
 
 import com.spreys.trademeviewer.Activities.SearchResultsActivity;
 import com.spreys.trademeviewer.Activities.CategoryListActivity;
-import com.spreys.trademeviewer.Adapters.SearchResultAdapter;
+import com.spreys.trademeviewer.Adapt.SearchResultAdapter;
 import com.spreys.trademeviewer.Model.Listing;
 import com.spreys.trademeviewer.NetworkCommunication.TradeMeApiWrapper;
 import com.spreys.trademeviewer.R;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class SearchResultsFragment extends Fragment {
 
-    public static final String PARAM_KEY_CATEGORY_NAME = "category_name";
+    public static final String PARAM_KEY_CATEGORY_ID = "category_id";
     public static final String PARAM_KEY_SEARCH_QUERY = "search_query";
 
     private TradeMeApiWrapper mApiWrapper;
@@ -68,7 +68,7 @@ public class SearchResultsFragment extends Fragment {
 
     private String getCategory() {
         if(null != getArguments()){
-            return getArguments().getString(PARAM_KEY_CATEGORY_NAME);
+            return getArguments().getString(PARAM_KEY_CATEGORY_ID);
         }
         return null;
     }

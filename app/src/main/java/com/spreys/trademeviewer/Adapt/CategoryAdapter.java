@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer.adapters;
+package com.spreys.trademeviewer.Adapt;
 
 import android.content.Context;
 import android.database.Cursor;

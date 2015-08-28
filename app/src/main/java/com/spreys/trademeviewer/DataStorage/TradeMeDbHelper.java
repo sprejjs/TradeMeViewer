@@ -1,10 +1,10 @@
-package com.spreys.trademeviewer.DateStorage;
+package com.spreys.trademeviewer.DataStorage;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.spreys.trademeviewer.DateStorage.TradeMeContract.*;
+import com.spreys.trademeviewer.DataStorage.TradeMeContract.*;
 
 /**
  * Created with Android Studio

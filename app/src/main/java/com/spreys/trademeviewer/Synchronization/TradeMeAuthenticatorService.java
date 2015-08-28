@@ -1,4 +1,4 @@
-package com.spreys.trademeviewer.sync;
+package com.spreys.trademeviewer.Synchronization;
 
 import android.app.Service;
 import android.content.Intent;
