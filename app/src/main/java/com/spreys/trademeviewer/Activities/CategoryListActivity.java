@@ -92,6 +92,11 @@ public class CategoryListActivity extends AppCompatActivity
         } else {
             if(mTwoPane) {
                 openSearchInCategory(selectedCategory.getNumber());
+            } else {
+                Intent intent = new Intent(this, SearchResultsActivity.class);
+                intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_ID, selectedCategory.getNumber());
+                intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME, selectedCategory.getName());
+                startActivity(intent);
             }
         }
     }

@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class SearchResultsFragment extends Fragment {
 
+    public static final String PARAM_KEY_CATEGORY_NAME = "category_name";
     public static final String PARAM_KEY_CATEGORY_ID = "category_id";
     public static final String PARAM_KEY_SEARCH_QUERY = "search_query";
 
