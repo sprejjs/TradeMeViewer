@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.spreys.trademeviewer.Activities.SearchResultsActivity;
 import com.spreys.trademeviewer.Activities.CategoryListActivity;
 import com.spreys.trademeviewer.Adapt.SearchResultAdapter;
 import com.spreys.trademeviewer.Model.Listing;

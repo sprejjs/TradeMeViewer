@@ -100,6 +100,11 @@ public class CategoryListActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .replace(R.id.categories_list_container, fragment)
                     .commit();
+
+            //On a tablet update the details fragment as well
+            if(mTwoPane) {
+                openSearchInCategory(selectedCategory.getNumber());
+            }
         } else {
             if(mTwoPane) {
                 openSearchInCategory(selectedCategory.getNumber());
