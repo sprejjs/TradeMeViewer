@@ -85,21 +85,46 @@ public class CategoryListActivity extends AppCompatActivity
     @Override
     public void onItemSelected(Category selectedCategory) {
         if(selectedCategory.getSubcategoriesCount() > 0) {
-            Intent intent = new Intent(this, CategoryListActivity.class);
-            intent.putExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
-            intent.putExtra(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
-            startActivity(intent);
+            //Initialise fragment
+            CategoryListFragment fragment = new CategoryListFragment();
+            Bundle arguments = new Bundle();
+
+            //Add category id
+            arguments.putString(CategoryListFragment.PARAM_CATEGORY_ID, selectedCategory.getNumber());
+            arguments.putString(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME, selectedCategory.getName());
+            arguments.putBoolean(CategoryListFragment.PARAM_TWO_PANE, mTwoPane);
+            fragment.setArguments(arguments);
+
+            //Initiate transition
+            getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.categories_list_container, fragment)
+                    .commit();
         } else {
             if(mTwoPane) {
                 openSearchInCategory(selectedCategory.getNumber());
             } else {
-                Intent intent = new Intent(this, SearchResultsActivity.class);
-                intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_ID, selectedCategory.getNumber());
-                intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME, selectedCategory.getName());
-                startActivity(intent);
+                SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID, selectedCategory.getNumber());
+                searchResultsFragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.categories_list_container, searchResultsFragment)
+                        .commit();
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 
     private void openSearchInCategory(String categoryName) {
         SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
@@ -146,13 +171,18 @@ public class CategoryListActivity extends AppCompatActivity
                     .replace(R.id.category_detail_container, searchResultsFragment)
                     .commit();
         } else {
-            Intent intent = new Intent(this, SearchResultsActivity.class);
-            intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
+            SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
+            Bundle arguments = new Bundle();
+            arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_ID,
                     getIntent().getStringExtra(CategoryListFragment.PARAM_CATEGORY_ID));
-            intent.putExtra(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME,
+            arguments.putString(SearchResultsFragment.PARAM_KEY_CATEGORY_NAME,
                     getIntent().getStringExtra(CategoryListFragment.PARAM_PARENT_CATEGORY_NAME));
-            intent.putExtra(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, searchQuery);
-            startActivity(intent);
+            arguments.putString(SearchResultsFragment.PARAM_KEY_SEARCH_QUERY, searchQuery);
+            searchResultsFragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.categories_list_container, searchResultsFragment)
+                    .commit();
         }
     }
 }

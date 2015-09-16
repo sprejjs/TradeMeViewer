@@ -56,7 +56,7 @@ public class CategoryListFragment extends ListFragment implements LoaderManager.
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                getActivity().onBackPressed();
             }
         });
 
